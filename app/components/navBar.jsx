@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { auth } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import Login from "@/components/login";
+import axios from "axios";
+
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,22 +15,49 @@ export default function NavBar() {
    const [checkingVerification, setCheckingVerification] = useState(false);
 
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      
-      if (firebaseUser?.emailVerified) {
-        setUser({
-          name: firebaseUser.displayName,
-          email: firebaseUser.email,
-          photo: firebaseUser.photoURL,
-        });
-      } else {
-        setUser(null);
-      }
-    });
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    if (firebaseUser && firebaseUser.emailVerified) {
+   
+      setUser({
+        name: firebaseUser.displayName,
+        email: firebaseUser.email,
+        photo: firebaseUser.photoURL,
+      });
 
-    return () => unsubscribe();
-  }, []);
+ 
+      const idToken = await firebaseUser.getIdToken();
+
+      try {
+        const response = await axios.post(
+          "https://mk25szk5-7093.inc1.devtunnels.ms/api/account/sync",
+          {},
+          {
+            headers: {
+              "Authorization": `Bearer ${idToken}`,
+            },
+          }
+        );
+
+        const jwt = response.data.token;
+
+        setToken(jwt);
+        localStorage.setItem("my_token", jwt);
+      setCheckingVerification(true);
+      } catch (error) {
+        setCheckingVerification(false)
+        console.error("فشل مزامنة الحساب:", error);
+      }
+
+    } else {
+
+      setUser(null);
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
+
 
   const checkEmailVerification = async () => {
   if (auth.currentUser) {
@@ -107,7 +136,9 @@ useEffect(() => {
             Your Templates
           </Link> : <></>}
 
-      {user? <></> :    <div className="flex gap-1"><div  
+
+{/* هنا لبمفروض بعدين اتحقق من الصلاحية الحساب checkingVerification */}
+      {user ? <></> :    <div className="flex gap-1"><div  
                     className="">
                       <Signup  />
                   </div>

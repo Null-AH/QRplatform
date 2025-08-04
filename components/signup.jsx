@@ -62,9 +62,11 @@ export default function Signup() {
     console.log("Email:", email);
     console.log("Photo URL:", photo);
 
-    const response = await axios.post("https://mk25szk5-7093.inc1.devtunnels.ms/api/account/sync", {
-      token: idToken,
-    });
+    const response = await axios.post("https://mk25szk5-7093.inc1.devtunnels.ms/api/account/sync", {},
+    {headers:{
+      "Authorization":`Bearer ${idToken}`
+    }},
+  );
 
     const jwt = response.data.token;
     setToken(jwt);

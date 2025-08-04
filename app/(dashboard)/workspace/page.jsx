@@ -3,7 +3,9 @@ import Component from "@/components/StepWorke";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useEvent } from "../context/StepsInfo";
+import { getIdToken } from "firebase/auth"
 
+import { auth } from "@/app/firebase/config";
 export default function WorkeSpace() {
   const [sendData, setSenddata] = useState(false);
 
@@ -16,12 +18,19 @@ export default function WorkeSpace() {
     fontColor,
   } = useEvent();
 
-  useEffect(() => {
+  useEffect( () => {
     if (!sendData) return;
 
+
+ 
     const sendForm = async () => {
+           
+    let user=auth.currentUser;
+
+
+      const token =await user.getIdToken();
       const formData = new FormData();
-            // console.log(  "eventName :", eventName,"excelData:",  excelData, "designImage:",designImage, "boxes:",   boxes,   eventDate,   fontColor,)
+      
         formData.append("eventName", eventName);
         formData.append("eventDate", eventDate);
         formData.append("fontColor", fontColor);
@@ -40,6 +49,7 @@ export default function WorkeSpace() {
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              "Authorization": `Bearer ${token}`
             },
             responseType: "blob",
           }

@@ -97,10 +97,10 @@ const [color, setColor] = useState("#000");
             minHeight={20}
             bounds="parent"
             enableResizing={{
-              top: true,
-              right: true,
-              bottom: true,
-              left: true,
+              top: item.type==="Name",
+              right: item.type==="Name",
+              bottom:item.type==="Name",
+              left: item.type==="Name",
               topRight: true,
               bottomRight: true,
               bottomLeft: true,

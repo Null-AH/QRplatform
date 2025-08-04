@@ -10,6 +10,7 @@ import ShinyText from "@/app/components/TextHomePAge";
 
 import { FaMagic, FaFileExcel, FaObjectGroup, FaQrcode } from "react-icons/fa";
 import PixelTransition from "@/app/components/imagePixle";
+import PricingCard from "@/app/components/PriceingCard";
 
 
 
@@ -103,6 +104,7 @@ export default function Home() {
             icon={<FaMagic className="text-4xl text-blue-600 mb-4" />}
             title="Auto Invitation Generation"
             desc="Automatically create personalized invitations with guest names and QR codes."
+            pro={true}
           />
           <FeatureCard
             icon={<FaFileExcel className="text-4xl text-green-600 mb-4" />}
@@ -113,6 +115,7 @@ export default function Home() {
             icon={<FaObjectGroup className="text-4xl text-purple-600 mb-4" />}
             title="Custom Placement"
             desc="Manually choose where to place each name and QR code on your design."
+            pro={true}
           />
           <FeatureCard
             icon={<FaQrcode className="text-4xl text-rose-600 mb-4" />}
@@ -123,6 +126,11 @@ export default function Home() {
       </div>
  </section>
 {/* سكشن ال features */}
+
+
+
+<PricingCard />
+
 
 
 
@@ -173,10 +181,20 @@ export default function Home() {
 }
 
 // فيجر كارت
-function FeatureCard({ icon, title, desc }) {
+function FeatureCard({ icon, title, desc, pro=false }) {
   return (
     <div className=" border border-white/20 
-                    backdrop-blur-md bg-white/10  p-6 rounded-3xl shadow-sm hover:shadow-md transition">
+                    backdrop-blur-md bg-white/10 relative p-6 rounded-3xl shadow-sm hover:shadow-md transition">
+{pro? <div className="     bg-white/10 text-blue-300 font-bold shadow-[0_0_15px_rgba(59,130,246,0.3)]
+                       before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-r 
+                       before:from-blue-500/20 
+                       before:to-purple-500/20 before:transition-all before:duration-300
+                       
+                       
+                       
+                       
+                       rounded-full top-2 flex justify-center items-center p-1 text-[10px] left-2  absolute  w-15 backdrop-blur-3xl">pro</div>
+:<></>}
       <div className="flex flex-col items-center text-center">
         {icon}
         <h3 className="text-lg font-semibold mb-2">{title}</h3>
