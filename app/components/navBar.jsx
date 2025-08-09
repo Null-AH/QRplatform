@@ -10,7 +10,7 @@ import axios from "axios";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [token,setToken]=useState("");
    const [user, setUser] = useState(null);
    const [checkingVerification, setCheckingVerification] = useState(false);
 
