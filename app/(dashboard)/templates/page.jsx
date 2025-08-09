@@ -4,6 +4,7 @@ import WaveCard from "@/app/components/EventCard";
 import NavBar from "@/app/components/templateNav";
 import ShinyText from "@/app/components/TextHomePAge";
 import { auth } from "@/app/firebase/config";
+import { LoaderOne } from "@/components/loding";
 import axios from "axios";
 
 import Link from "next/link";
@@ -14,40 +15,9 @@ import { useEffect } from "react";
 export default function TemplatesPage() {
 
 const [template,setTemplate]=useState([]);
+const [loding,setloding]=useState(false);
 
-  const templates = [
-    {
-      id: 1,
-      name: "Tailwind Card",
-      image: "/imagtest.jpg",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    },
-    {
-      id: 2,
-      name: "Elegant Style",
-      image: "/imagtest.jpg",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-    },
-    {
-      id: 3,
-      name: "Minimal Gray",
-      image: "/imagtest.jpg",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-    },
-        {
-      id: 4,
-      name: "Minimal Gray",
-      image: "/imagtest.jpg",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-    },
 
-         {
-      id: 5,
-      name: "Minimal Gray",
-      image: "/imagtest.jpg",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-    },
-  ];
   const baseApiUrl = "https://mk25szk5-7093.inc1.devtunnels.ms";
 
   useEffect(()=>{
@@ -56,23 +26,25 @@ const [template,setTemplate]=useState([]);
      
       const GetTemplate=async ()=>{
 
+      setloding(true);
 
-             const currentUser = auth.currentUser;
-      if (!currentUser) {
-        alert("You must be logged in to create an event.");
+      //        const currentUser = auth.currentUser;
+      // if (!currentUser) {
+      //   alert("You must be logged in to create an event.");
       
-        return;
-      }
+      //   // return;
+      // }
 
-      const idToken = await currentUser.getIdToken();
+      // const idToken = await currentUser.getIdToken();
+      // localStorage.setItem("token",idToken);
 
-      console.log(idToken)
+      // console.log(idToken)
         
 try{
         const response =await axios.get(`${baseApiUrl}/api/event/all`,          
           {
               headers:{
-      'Authorization': `Bearer ${idToken}`      
+      'Authorization': `Bearer ${localStorage.getItem("token")}`      
 
       }
       }
@@ -81,6 +53,7 @@ try{
 
       console.log(response.data);
       setTemplate(response.data);
+      setloding(false);
     }
       catch(error)
           {
@@ -100,8 +73,9 @@ GetTemplate();
 
     <div className="w-full max-w-7xl mx-auto px-4 mt-[100px]">
 
-
-      {template.length===0? <>
+{loding?<div className="flex w-full h-full justify-center items-center"
+>
+  <LoaderOne /></div>: <>  {template.length===0? <>
       
       <div className="flex w-full  justify-center items-center h-full ">
 
@@ -146,7 +120,8 @@ GetTemplate();
      
     ))}
 
-  </div>}
+  </div>}</>}
+    
  
 </div>
 

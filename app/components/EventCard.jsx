@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useRef } from "react";
+import Actions from "./modealCard";
 
 
 
@@ -109,11 +110,19 @@ export default function WaveCard({ tags, title, description, buttonText , imagur
                 </div>
               </div>
             </div>
-            <div className="w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+            <div className="w-full   h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+
+
             <div className="p-4">
+      
+      <div className="flex w-full justify-between">
               <span className="inline-block px-3 py-1 glass text-indigo-300 rounded-full text-xs font-medium mb-3 border border-indigo-400/30">
                 {tags}
               </span>
+
+             <Actions id={id} name={title} date={description} />
+      </div>
+             
               <h3 className="text-lg font-medium text-white mb-2">{title}</h3>
               <p className="text-white/70 mb-4 leading-relaxed text-xs">
                 {description}
@@ -138,6 +147,8 @@ export default function WaveCard({ tags, title, description, buttonText , imagur
                 </Link>
               </div>
             </div>
+
+
           </div>
         </div>
       </div>

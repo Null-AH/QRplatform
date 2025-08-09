@@ -1,3 +1,5 @@
+"use client"
+
 import NavBar from "@/app/components/navBar";
 import Component from "@/components/questions";
 import { FaAngleDown } from "react-icons/fa6";
@@ -11,11 +13,36 @@ import ShinyText from "@/app/components/TextHomePAge";
 import { FaMagic, FaFileExcel, FaObjectGroup, FaQrcode } from "react-icons/fa";
 import PixelTransition from "@/app/components/imagePixle";
 import PricingCard from "@/app/components/PriceingCard";
+import { useEffect } from "react";
+import { auth } from "@/app/firebase/config";
 
 
 
 
 export default function Home() {
+  
+
+  useEffect(()=>{
+
+    const gettoken= async ()=>{
+
+          const currentUser = auth.currentUser;
+           if(currentUser){
+          const idToken = await currentUser.getIdToken();
+          localStorage.setItem("token",idToken);    
+            console.log(idToken)
+           }
+    
+
+
+    }
+
+    gettoken();
+
+
+  },[])
+
+
   return (
     <div className="min-h-screen flex flex-col items-center text-white pt-[60px] px-4">
 

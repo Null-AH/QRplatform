@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useEvent } from "../context/StepsInfo";
 import { auth } from "@/app/firebase/config";
+import { useRouter } from "next/navigation";
 
 export default function WorkeSpace() {
   const [sendData, setSenddata] = useState(false);
+  const navigator=useRouter()
   // حالة جديدة لتتبع ما إذا كان الطلب قيد التقدم لمنع النقرات المتعددة
   // A new state to track if a request is in progress to prevent multiple clicks
   const [isLoading, setIsLoading] = useState(false);
@@ -111,6 +113,7 @@ export default function WorkeSpace() {
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
+                  navigator.push("/templates")
                 }
                 // إذا كانت الحالة 202، فالعملية لا تزال قيد التنفيذ، لذا ننتظر
                 // If the status is 202, it's still processing, so we wait
