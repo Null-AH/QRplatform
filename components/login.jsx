@@ -44,9 +44,11 @@ export default function Login() {
       setUserInfo({ name, email, photo });
 
       // إرسال التوكن للباك إند
-      const response = await axios.post("https://mk25szk5-7093.inc1.devtunnels.ms/api/account/sync", {
-        token: idToken,
-      });
+      const response = await axios.post("https://mk25szk5-7093.inc1.devtunnels.ms/api/account/sync", {},
+    {headers:{
+      "Authorization":`Bearer ${idToken}`
+    }},
+  );
 
       const jwt = response.data.token;
       localStorage.setItem("my_token", jwt);
@@ -70,9 +72,11 @@ export default function Login() {
 
       setUserInfo({ name, email, photo });
 
-      const response = await axios.post("https://mk25szk5-7093.inc1.devtunnels.ms/api/account/sync", {
-        token: idToken,
-      });
+      const response = await axios.post("https://mk25szk5-7093.inc1.devtunnels.ms/api/account/sync", {},
+    {headers:{
+      "Authorization":`Bearer ${idToken}`
+    }},
+  );
         console.log("from post")
       const jwt = response.data.token;
       localStorage.setItem("my_token", jwt);

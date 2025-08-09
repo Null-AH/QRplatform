@@ -108,6 +108,19 @@ else{
 
   }
 
+
+
+  useEffect(()=>{
+
+    if(currentStep===5){
+      setSenddata(true);
+    }
+
+
+  },[currentStep,setSenddata])
+
+
+
   return (
     <div className="mx-auto  w-1/2 mt-20 space-y-8 text-center">
       <Stepper value={currentStep} onValueChange={setCurrentStep}>
@@ -126,7 +139,7 @@ else{
           <div className="flex w-full  min-h-[450px] items-center justify-center ">
               
                <StepContent  currentStep={currentStep} />
-              {currentStep === 5  && setSenddata(true)}
+              {/* {currentStep === 5  && setSenddata(true)} */}
               {currentStep === 5  && ( <Loading />)}
               
             </div>
