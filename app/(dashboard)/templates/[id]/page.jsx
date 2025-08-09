@@ -13,55 +13,60 @@ import TasbleEventDetails from "@/components/TasbleEventDetails";
 
 const EventDetails=()=>{
 
+
+    const [EventInfo,setEventInfo]=useState([]);
     const {id}=useParams()
 
 
-//     useEffect(()=>{
+    useEffect(()=>{
 
-//         const GetEventDetails=async()=>{
+        const GetEventDetails=async()=>{
 
-//           const currentUser = auth.currentUser;
-//       if (!currentUser) {
-//         alert("You must be logged in to create an event.");
+          const currentUser = auth.currentUser;
+      if (!currentUser) {
+        alert("You must be logged in to create an event.");
      
-//         return;
-//       }
+        return;
+      }
 
-//       const idToken = await currentUser.getIdToken();
+      const idToken = await currentUser.getIdToken();
 
 
-//             try{
-//                 console.log(id)
-//                     const response =await axios.get(`${baseApiUrl}/api/event/${id}`,
-//                         {
-//                             headers:{
-//                             'Authorization': `Bearer ${idToken}`      
+            try{
+                console.log(id)
+                    const response =await axios.get(`${baseApiUrl}/api/event/${id}`,
+                        {
+                            headers:{
+                            'Authorization': `Bearer ${idToken}`      
                             
-//                         }
+                        }
                         
-//                         })
+                        })
 
-//                         console.log(response.data)
-//             }
-//             catch(error){
-//                 console.log("error her",error);
-//             }
+                        console.log("peratn", response.data)
+                        setEventInfo(response.data);
+            }
+            catch(error){
+                console.log("error her",error);
+            }
 
 
 
 
-//         }
+        }
 
-// GetEventDetails();
+GetEventDetails();
 
-//     },[])
+    },[])
 
 
 
 
 
     return(
-    
+    <div className="flex w-full h-full justify-center items-center">
+
+
     <div className="p-10">
 
     <TasbleEventDetails url={`${baseApiUrl}/api/event/${id}`} />
@@ -75,7 +80,7 @@ const EventDetails=()=>{
     
     
     </div>
-    
+        </div>
 )
 
 

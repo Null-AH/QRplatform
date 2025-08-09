@@ -1,10 +1,11 @@
 "use client"
 import TextType from "@/app/components/emptyTemplate";
+import WaveCard from "@/app/components/EventCard";
 import NavBar from "@/app/components/templateNav";
 import ShinyText from "@/app/components/TextHomePAge";
 import { auth } from "@/app/firebase/config";
 import axios from "axios";
-// import { headers } from "next/headers";
+
 import Link from "next/link";
 
 import { useState } from "react";
@@ -59,12 +60,13 @@ const [template,setTemplate]=useState([]);
              const currentUser = auth.currentUser;
       if (!currentUser) {
         alert("You must be logged in to create an event.");
-        setSenddata(false);
-        setIsLoading(false);
+      
         return;
       }
 
       const idToken = await currentUser.getIdToken();
+
+      console.log(idToken)
         
 try{
         const response =await axios.get(`${baseApiUrl}/api/event/all`,          
@@ -96,7 +98,7 @@ GetTemplate();
     <div className="flex flex-wrap justify-center gap-6 p-6 b min-h-screen">
         <NavBar />
 
-    <div className="w-full max-w-7xl mx-auto px-4 mt-[150px]">
+    <div className="w-full max-w-7xl mx-auto px-4 mt-[100px]">
 
 
       {template.length===0? <>
@@ -115,14 +117,49 @@ GetTemplate();
           className="text-[30px] mb-[100px] text-shadow-2xl p-3"
           
         />
-   {/* <ShinyText text="you dont have any Template yet" disabled={false} speed={3} className='custom-class' /> */}
+        {/* <ShinyText text="you dont have any Template yet" disabled={false} speed={3} className='custom-class' /> */}
         {/* <h1 className="text-[30px] text-[#c4d1e2] mb-[100px]"></h1> */}
       </div>
       
-      </>: <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 gap-y-15">
+      </>: <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
+
+
 
     
-    {template.map((item) => (
+
+
+
+     {template.map((item) => (
+
+
+  <WaveCard
+      key={item.id}
+      tags={`${item.attendeeCount} person`}
+      title={item.name}
+      description={item.eventDate}
+      buttonText="Manage"
+      imagurl={`${baseApiUrl}${item.backgroundImageUri}`} 
+       href={`templates/${item.id}`}
+       id={item.id}
+    />
+      
+     
+    ))}
+
+  </div>}
+ 
+</div>
+
+    
+    </div>
+  );
+}
+
+
+
+    {/* {template.map((item) => (
+
+      
       <div key={item.id}>
         <div className="relative flex w-full flex-col rounded-xl bg-[#ffffff2a] backdrop-blur-3xl bg-clip-border justify-center items-center text-white shadow-md">
           <div className="relative w-[95%] -top-9  h-40 overflow-hidden rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-gray-500/40">
@@ -151,12 +188,4 @@ GetTemplate();
           </div>
         </div>
       </div>
-    ))}
-  </div>}
- 
-</div>
-
-    
-    </div>
-  );
-}
+    ))} */}

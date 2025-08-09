@@ -85,6 +85,8 @@ import {
 } from "@/components/ui/table"
 import { auth } from "@/app/firebase/config";
 import axios from "axios";
+import ShinyText from "@/app/components/TextHomePAge";
+import { LoaderOne } from "./loding";
 
 // Custom filter function for multi-column searching
 const multiColumnFilterFn = (row, columnId, filterValue) => {
@@ -188,17 +190,18 @@ const columns = [
     ),
     size: 80,
   },
-  {
-    id: "actions",
-    header: () => <span className="sr-only">Actions</span>,
-    cell: ({ row }) => <RowActions row={row} />,
-    size: 60,
-    enableHiding: false,
-  },
+  // {
+  //   id: "actions",
+  //   header: () => <span className="sr-only">Actions</span>,
+  //   // cell: ({ row }) => <RowActions row={row} />,
+  //   size: 60,
+  //   enableHiding: false,
+  // },
 ]
 
 export default function TasbleEventDetails({url}) {
   const id = useId()
+  const [eventinfo,seteventinfo]=useState({});
   const [columnFilters, setColumnFilters] = useState([])
   const [columnVisibility, setColumnVisibility] = useState({})
   const [pagination, setPagination] = useState({
@@ -270,8 +273,9 @@ export default function TasbleEventDetails({url}) {
     })
     
     setData(response.data.attendees)
+    seteventinfo(response.data);
 
-    // console.log(response.data)
+    console.log(response.data)
   }
   catch(error){
     console.log(error);
@@ -487,6 +491,8 @@ export default function TasbleEventDetails({url}) {
             {table.getSelectedRowModel().rows.length > 0 && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
+
+                 
                   <Button className="ml-auto bg-red-600 hover:bg-red-700 border-red-600 text-white" variant="outline">
                     <TrashIcon className="-ms-1 opacity-60" size={16} aria-hidden="true" />
                     Delete
@@ -525,12 +531,13 @@ export default function TasbleEventDetails({url}) {
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
+
+              
             )}
-            {/* Add user button */}
-            <Button className="ml-auto bg-blue-600 hover:bg-blue-700 border-blue-600 text-white" variant="outline">
-              <PlusIcon className="-ms-1 opacity-60" size={16} aria-hidden="true" />
-              Add Attendee
-            </Button>
+            <div className="flex flex-col items-end mr-2 gap-4">
+                   <ShinyText text={eventinfo.name} disabled={false} speed={30} className='custom-class text-2xl  md:text-5xl lg:text-5xl ' />
+              {eventinfo.eventDate}
+            </div>
           </div>
         </div>
         {/* Table */}
@@ -580,7 +587,7 @@ export default function TasbleEventDetails({url}) {
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody>
+            <TableBody >
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id} 
@@ -594,11 +601,19 @@ export default function TasbleEventDetails({url}) {
                   </TableRow>
                 ))
               ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center text-gray-400">
-                    No attendees found.
-                  </TableCell>
-                </TableRow>
+       <TableRow>
+          <TableCell
+            colSpan={columns.length}
+            className="w-full h-30 text-gray-400"
+          >
+            <div className="flex items-center justify-center w-full h-full">
+              <LoaderOne />
+            </div>
+          </TableCell>
+        </TableRow>
+
+
+
               )}
             </TableBody>
           </Table>
@@ -706,77 +721,68 @@ export default function TasbleEventDetails({url}) {
             </Pagination>
           </div>
         </div>
-        <p className="text-gray-400 mt-4 text-center text-sm">
-          Example of a more complex table made with{" "}
-          <a
-            className="hover:text-gray-200 underline text-blue-400"
-            href="https://tanstack.com/table"
-            target="_blank"
-            rel="noopener noreferrer">
-            TanStack Table
-          </a>
-        </p>
+      
       </div>
     </div>
   );
 }
 
-function RowActions({
-  row
-}) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div className="flex justify-end">
-          <Button
-            size="icon"
-            variant="ghost"
-            className="shadow-none text-gray-400 hover:text-gray-200 hover:bg-gray-700"
-            aria-label="Edit item">
-            <EllipsisIcon size={16} aria-hidden="true" />
-          </Button>
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-gray-800 border-gray-700">
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">
-            <span>Edit</span>
-            <DropdownMenuShortcut className="text-gray-400">⌘E</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">
-            <span>Duplicate</span>
-            <DropdownMenuShortcut className="text-gray-400">⌘D</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator className="bg-gray-600" />
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">
-            <span>Archive</span>
-            <DropdownMenuShortcut className="text-gray-400">⌘A</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="text-gray-200 focus:bg-gray-700">More</DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent className="bg-gray-800 border-gray-700">
-                <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">Move to project</DropdownMenuItem>
-                <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">Move to folder</DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-gray-600" />
-                <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">Advanced options</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator className="bg-gray-600" />
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">Share</DropdownMenuItem>
-          <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">Add to favorites</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator className="bg-gray-600" />
-        <DropdownMenuItem className="text-red-400 focus:text-red-300 focus:bg-red-900/20">
-          <span>Delete</span>
-          <DropdownMenuShortcut className="text-red-400">⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
+// function RowActions({
+//   row
+// }) {
+//   return (
+//     <DropdownMenu>
+//       <DropdownMenuTrigger asChild>
+//         <div className="flex justify-end">
+//           <Button
+//             size="icon"
+//             variant="ghost"
+//             className="shadow-none text-gray-400 hover:text-gray-200 hover:bg-gray-700"
+//             aria-label="Edit item">
+//             <EllipsisIcon size={16} aria-hidden="true" />
+//           </Button>
+//         </div>
+//       </DropdownMenuTrigger>
+//       <DropdownMenuContent align="end" className="bg-gray-800 border-gray-700">
+//         <DropdownMenuGroup>
+//           <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">
+//             <span>Edit</span>
+//             <DropdownMenuShortcut className="text-gray-400">⌘E</DropdownMenuShortcut>
+//           </DropdownMenuItem>
+//           <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">
+//             <span>Duplicate</span>
+//             <DropdownMenuShortcut className="text-gray-400">⌘D</DropdownMenuShortcut>
+//           </DropdownMenuItem>
+//         </DropdownMenuGroup>
+//         <DropdownMenuSeparator className="bg-gray-600" />
+//         <DropdownMenuGroup>
+//           <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">
+//             <span>Archive</span>
+//             <DropdownMenuShortcut className="text-gray-400">⌘A</DropdownMenuShortcut>
+//           </DropdownMenuItem>
+//           <DropdownMenuSub>
+//             <DropdownMenuSubTrigger className="text-gray-200 focus:bg-gray-700">More</DropdownMenuSubTrigger>
+//             <DropdownMenuPortal>
+//               <DropdownMenuSubContent className="bg-gray-800 border-gray-700">
+//                 <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">Move to project</DropdownMenuItem>
+//                 <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">Move to folder</DropdownMenuItem>
+//                 <DropdownMenuSeparator className="bg-gray-600" />
+//                 <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">Advanced options</DropdownMenuItem>
+//               </DropdownMenuSubContent>
+//             </DropdownMenuPortal>
+//           </DropdownMenuSub>
+//         </DropdownMenuGroup>
+//         <DropdownMenuSeparator className="bg-gray-600" />
+//         <DropdownMenuGroup>
+//           <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">Share</DropdownMenuItem>
+//           <DropdownMenuItem className="text-gray-200 focus:bg-gray-700">Add to favorites</DropdownMenuItem>
+//         </DropdownMenuGroup>
+//         <DropdownMenuSeparator className="bg-gray-600" />
+//         <DropdownMenuItem className="text-red-400 focus:text-red-300 focus:bg-red-900/20">
+//           <span>Delete</span>
+//           <DropdownMenuShortcut className="text-red-400">⌘⌫</DropdownMenuShortcut>
+//         </DropdownMenuItem>
+//       </DropdownMenuContent>
+//     </DropdownMenu>
+//   );
+// }
