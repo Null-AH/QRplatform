@@ -51,7 +51,7 @@ export default function Login() {
   );
 
       const jwt = response.data.token;
-      localStorage.setItem("my_token", jwt);
+      localStorage.setItem("token", jwt);
       setMessage("✅ تم تسجيل الدخول بنجاح");
     } catch (error) {
       setMessage("❌ فشل تسجيل الدخول: " + error.message);
@@ -79,7 +79,7 @@ export default function Login() {
   );
         console.log("from post")
       const jwt = response.data.token;
-      localStorage.setItem("my_token", jwt);
+      localStorage.setItem("token", jwt);
       setMessage("✅ تم تسجيل الدخول بجوجل بنجاح");
     } catch (error) {
       setMessage("❌ فشل تسجيل الدخول بجوجل: " + error.message);
