@@ -70,7 +70,7 @@ export default function Signup() {
 
     const jwt = response.data.token;
     setToken(jwt);
-    localStorage.setItem("my_token", jwt);
+    localStorage.setItem("token", jwt);
     alert("تم تسجيل الدخول بنجاح ✅");
   } catch (error) {
     console.error("Login error:", error);
