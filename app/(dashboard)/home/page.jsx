@@ -15,6 +15,7 @@ import PixelTransition from "@/app/components/imagePixle";
 import PricingCard from "@/app/components/PriceingCard";
 import { useEffect } from "react";
 import { auth } from "@/app/firebase/config";
+import { onAuthStateChanged } from "firebase/auth";
 
 
 
@@ -22,25 +23,19 @@ import { auth } from "@/app/firebase/config";
 export default function Home() {
   
 
-  useEffect(()=>{
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const idToken = await user.getIdToken();
+        localStorage.setItem("token", idToken);
+        // console.log("Token:", idToken);
+      } else {
+        console.log("unauthorized");
+      }
+    });
 
-    const gettoken= async ()=>{
-
-          const currentUser = auth.currentUser;
-           if(currentUser){
-          const idToken = await currentUser.getIdToken();
-          localStorage.setItem("token",idToken);    
-            console.log(idToken)
-           }
-    
-
-
-    }
-
-    gettoken();
-
-
-  },[])
+    return () => unsubscribe();
+  }, []);
 
 
   return (
@@ -57,7 +52,7 @@ export default function Home() {
           professional, personalized invitations with QR codes for everyone!
         </p> 
         
-        <Link href="/workspace" className="button-container  mb-30 ">
+        <Link href="/templates" className="button-container  mb-30 ">
             <div className="button">
                 <span>Get Started</span>
             </div>

@@ -491,7 +491,7 @@ export default function TasbleEventDetails({url}) {
             {table.getSelectedRowModel().rows.length > 0 && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-
+                  
                  
                   <Button className="ml-auto bg-red-600 hover:bg-red-700 border-red-600 text-white" variant="outline">
                     <TrashIcon className="-ms-1 opacity-60" size={16} aria-hidden="true" />

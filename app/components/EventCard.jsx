@@ -5,8 +5,22 @@ import Actions from "./modealCard";
 
 
 
-export default function WaveCard({ tags, title, description, buttonText , imagurl="" ,href,id}) {
+export default function WaveCard({ tags, title, description, buttonText , imagurl=`https://placehold.co/600x400/2B2543/FFFFFF/png?text=${title}` ,href,id}) {
   const canvasRef = useRef(null);
+const isValidImage = (url) => {
+  if (!url) return false;
+  const trimmed = url.trim().toLowerCase();
+  // استبعاد أي رابط placeholder معروف
+  if (trimmed.includes("placehold.co")) return false;
+  // ممكن تضيف شروط أكثر إذا عندك روابط مزيفة ثانية
+  return true;
+};
+
+const finalImage = isValidImage(imagurl)
+  ? imagurl
+  : `https://placehold.co/500x400/020618/FFFFFF/png?text=${encodeURIComponent(title)}`;
+
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -94,17 +108,9 @@ export default function WaveCard({ tags, title, description, buttonText , imagur
               <div className="w-full h-48 rounded-xl border border-[#2F5BB8] inner-glow overflow-hidden relative">
                 <div className="absolute ">
 
-                  {imagurl===""?<div
-                    className="w-full h-full animate-pulse"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px)",
-                      backgroundSize: "15px 15px",
-                    }}
-                  /> :  <img  className="w-full h-full " src={imagurl} alt="wait" />
-}
-          
+                
 
+                    <img  className="w-full h-full "  src={finalImage} alt={title} />
                   
 
                 </div>

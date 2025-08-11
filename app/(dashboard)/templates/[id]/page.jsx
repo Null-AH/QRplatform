@@ -4,6 +4,7 @@ import { useParams } from "next/navigation"
 import axios from "axios"
 import { auth } from "@/app/firebase/config";
 import TasbleEventDetails from "@/components/TasbleEventDetails";
+import TableCollaborators from "@/components/tableCollaborator";
 // import { headers } from "next/headers";
 
 
@@ -22,14 +23,14 @@ const EventDetails=()=>{
 
         const GetEventDetails=async()=>{
 
-          const currentUser = auth.currentUser;
-      if (!currentUser) {
-        alert("You must be logged in to create an event.");
+    //       const currentUser = auth.currentUser;
+    //   if (!currentUser) {
+    //     alert("You must be logged in to create an event.");
      
-        return;
-      }
+    //     return;
+    //   }
 
-      const idToken = await currentUser.getIdToken();
+    //   const idToken = await currentUser.getIdToken();
 
 
             try{
@@ -37,7 +38,7 @@ const EventDetails=()=>{
                     const response =await axios.get(`${baseApiUrl}/api/event/${id}`,
                         {
                             headers:{
-                            'Authorization': `Bearer ${idToken}`      
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`      
                             
                         }
                         
@@ -67,12 +68,12 @@ GetEventDetails();
     <div className="flex w-full h-full justify-center items-center">
 
 
-    <div className="p-10">
+    <div className="p-10 flex  flex-col lg:flex-row justify-center">
 
     <TasbleEventDetails url={`${baseApiUrl}/api/event/${id}`} />
     
     
-    
+    <TableCollaborators />
     
     
     

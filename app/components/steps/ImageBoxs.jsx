@@ -144,6 +144,16 @@ export default function ImageWithBoxes() {
                   ? "border-[#008cff] border-2"
                   : "border-[#37ff00] border-2"
               } h-full bg-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[2.3px] p-3 flex`}
+
+                style={{
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    // overflow: `${item.type === "QR"? "auto":"hidden"}`,
+    // overflow:"auto"
+  }}
             >
               <MdDeleteForever
                 className="text-red-500 absolute z-50 text-2xl -top-6 -left-5 cursor-pointer"
@@ -151,6 +161,28 @@ export default function ImageWithBoxes() {
                   handeldeltebox(item.id);
                 }}
               />
+
+
+                   {item.type==="QR"?<h1   style={{
+                    whiteSpace: "nowrap",
+                   fontSize:"30px",
+                    transformOrigin: "center",
+                    color:"#008cff",
+                    backgroundColor:"#fff",
+                    padding:"5px",
+                    borderRadius:"10px"
+                  }}  
+                  >QR</h1>: <h1   style={{
+                    whiteSpace: "nowrap",
+                    transform: `scale(${Math.min(item.width / 150, item.height / 40)})`,
+                    transformOrigin: "center",
+                    color:`${color}`,
+                  }}  
+                  >name be like this</h1>}
+
+
+
+
             </div>
           </Rnd>
         ))}
