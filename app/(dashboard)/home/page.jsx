@@ -46,7 +46,7 @@ export default function Home() {
 {/* سكسشن ال  home */}
       <section id="home" className="flex flex-col justify-center items-center relative min-h-screen text-center max-w-3xl gap-2">
    
-        <ShinyText text="Effortlessly Organize Your Event Invitations" disabled={false} speed={30} className='custom-class text-2xl md:text-5xl lg:text-5xl ' />
+        <ShinyText text="Effortlessly Organize Your Event Invitations" disabled={false} speed={10} className='custom-class font-bold text-2xl md:text-5xl lg:text-5xl ' />
         <p className="text-lg  mb-30  text-gray-600 leading-relaxed">
           Upload your names list and design, and let our platform generate
           professional, personalized invitations with QR codes for everyone!

@@ -780,7 +780,7 @@ html{
 
   width: 100%;
   height: 100%;
-  background-color: hsla(260 97% 61% / 0.75);
+  background-color: #7b3bfcbf ;
   background-image: radial-gradient(
       at 51% 89%,
       hsla(266, 45%, 74%, 1) 0px,
@@ -907,3 +907,100 @@ html{
   color: transparent;
 }
 /* pro button */
+
+
+
+
+
+/* pay button */
+
+.buttonpay {
+    line-height: 1;
+    text-decoration: none;
+    display: inline-flex;
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: var(--clr);
+    color: #fff;
+    border-radius: 10rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    padding-left: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background-color 0.3s;
+  }
+
+  .button__icon-wrapper {
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    color: var(--clr);
+    background-color: #fff;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  .buttonpay:hover {
+    background-color: #000;
+  }
+
+  .buttonpay:hover .button__icon-wrapper {
+    color: #000;
+  }
+
+  .button__icon-svg--copy {
+    position: absolute;
+    transform: translate(-150%, 150%);
+  }
+
+  .buttonpay:hover .button__icon-svg:first-child {
+    transition: transform 0.3s ease-in-out;
+    transform: translate(150%, -150%);
+  }
+
+  .buttonpay:hover .button__icon-svg--copy {
+    transition: transform 0.3s ease-in-out 0.1s;
+    transform: translate(0);
+  }
+
+  /* pay button */
+
+
+  /* shi */
+
+  .shiny-text {
+  color: #b5b5b5a4; /* Adjust this color to change intensity/style */
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  display: inline-block;
+  animation: shine 5s linear infinite;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: -100%;
+  }
+}
+
+.shiny-text.disabled {
+  animation: none;
+}
+
+/* shiny */
