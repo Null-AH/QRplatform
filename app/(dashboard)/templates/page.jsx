@@ -49,16 +49,19 @@ try{
       }
       
       )
-
+  setloding(false);
       console.log(response.data);
       setTemplate(response.data);
-      setloding(false);
+    
     }
       catch(error)
           {
     console.log(error);
 
                 } 
+                finally{
+                  setloding(false)
+                }
               
               }
 
@@ -70,57 +73,71 @@ GetTemplate();
     <div className="flex flex-wrap justify-center gap-6 p-6 b min-h-screen">
         <NavBar />
 
-    <div className="w-full max-w-7xl mx-auto px-4 mt-[100px]">
+            <div className="w-full max-w-7xl mx-auto px-4 mt-[100px]">
 
-{loding?<div className="flex w-full h-full justify-center items-center"
->
-  <LoaderOne /></div>: <>  {template.length===0? <>
-      
-      <div className="flex w-full  justify-center items-center h-full ">
-
-
-
-
-        <TextType 
-          text={["you dont have any Template yet", "Create New Template", "Click Create Teamplate"]}
-          typingSpeed={75}
-          pauseDuration={1500}
-          showCursor={true}
-          cursorCharacter="_"
-          className="text-[30px] mb-[100px] text-shadow-2xl p-3"
+        {loding?
+        
+        <div className="flex w-full h-full justify-center items-center"  >
           
-        />
-        {/* <ShinyText text="you dont have any Template yet" disabled={false} speed={3} className='custom-class' /> */}
-        {/* <h1 className="text-[30px] text-[#c4d1e2] mb-[100px]"></h1> */}
-      </div>
-      
-      </>: <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
+          <LoaderOne />
+          
+
+          
+          </div>
+          
+          
+          : 
+          
+          <> 
+          
+          
+           {template.length===0? <>
+             
+              <div className="flex w-full  justify-center items-center h-full ">
 
 
 
-    
+
+                <TextType 
+                  text={["you dont have any Template yet", "Create New Template", "Click Create Teamplate"]}
+                  typingSpeed={75}
+                  pauseDuration={1500}
+                  showCursor={true}
+                  cursorCharacter="_"
+                  className="text-[30px] mb-[100px] text-shadow-2xl p-3"
+                  
+                />
+                {/* <ShinyText text="you dont have any Template yet" disabled={false} speed={3} className='custom-class' /> */}
+                {/* <h1 className="text-[30px] text-[#c4d1e2] mb-[100px]"></h1> */}
+              </div>
+              
+              </>: <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
 
 
 
-     {template.map((item) => (
+            
 
 
-  <WaveCard
-      key={item.id}
-      tags={`${item.attendeeCount} person`}
-      title={item.name}
-      description={item.eventDate}
-      buttonText="Manage"
-      imagurl={`${baseApiUrl}${item.backgroundImageUri}`} 
-       href={`templates/${item.id}`}
-       id={item.id}
-    />
-      
-     
-    ))}
 
-  </div>}</>}
-    
+            {template.map((item) => (
+
+
+          <WaveCard
+              key={item.id}
+              tags={`${item.attendeeCount} person`}
+              title={item.name}
+              description={item.eventDate}
+              buttonText="Manage"
+              imagurl={`${baseApiUrl}${item.backgroundImageUri}`} 
+              href={`templates/${item.id}`}
+              id={item.id}
+            />
+              
+            
+            ))}
+
+          </div>}</>}
+            
  
 </div>
 

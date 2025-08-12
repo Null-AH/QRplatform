@@ -99,6 +99,8 @@ export default function NavBar() {
                 </Link >
 
           </div>
+
+          
           <Link href="/workspacefree"
              className="relative cursor-pointer inline-flex items-center gap-2 px-6 py-3 font-semibold text-white
   bg-gradient-to-tr from-[#000000] via-[#1f1f1f] to-[#1b1b1b] ring-4 ring-black/10
@@ -122,9 +124,27 @@ export default function NavBar() {
         <div className="flex h-[55px] px-4 rounded-2xl border border-white/20 backdrop-blur-md bg-white/10 
                         text-white items-center justify-between shadow-md">
           
-          <div className="text-lg font-bold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
-            LOGO
-          </div>
+           <div className="text-xl font-bold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent 
+                        hover:from-blue-400 hover:to-purple-400 transition-all duration-300 cursor-pointer">
+        <div className="flex items-center justify-center gap-2">
+                {/* صورة المستخدم + الإيميل */}
+                <div className="flex flex-col p-2 items-start">
+               
+
+                {userinfo.imgUrl 
+                      ? <img src={userinfo.imgUrl} alt="User"     className="w-11 h-11 rounded-full border border-white/30 shadow-sm" /> 
+                      : <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf1fiSQO7JfDw0uv1Ae_Ye-Bo9nhGNg27dwg&s" alt="Default avatar"      className="w-11 h-11 rounded-full border border-white/30 shadow-sm"/>
+                    }
+                </div>
+
+            <div className="flex flex-col  items-start">           
+               
+                <h3 className="text-sm font-semibold text-white">{userinfo.name}</h3>
+                <p className="text-xs text-gray-400 mt-1">{userinfo.email}</p> </div>
+              
+              </div>
+
+        </div>
 
           {/* Hamburger Menu Button */}
           <button 
@@ -142,21 +162,22 @@ export default function NavBar() {
                         shadow-md text-white transition-all duration-300 overflow-hidden p-7 ${
                           isOpen ? 'max-h-44 opacity-100' : 'max-h-0 opacity-0'
                         }`}>
-          <div className="flex flex-col p-2 gap-5">
-            <Link href="/workspace" 
-                  onClick={() => setIsOpen(false)}
-                  className="relative cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3 
-                            font-semibold text-blue-50 bg-gradient-to-tr from-blue-900/30 via-blue-900/70 to-blue-900/30 
-                            ring-2 ring-blue-900/20 rounded-full overflow-hidden hover:opacity-90 hover:ring-blue-800/30 
-                            hover:from-blue-800/40 hover:via-blue-800/80 hover:to-blue-800/40 transition-all duration-300 
-                            hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] active:scale-95
-                            before:absolute before:top-2 before:left-1/2 before:-translate-x-1/2 before:w-[80px] 
-                            before:h-[80px] before:rounded-full before:bg-gradient-to-b before:from-blue-50/10 before:blur-xl
-                            after:absolute after:inset-0 after:rounded-full after:bg-gradient-to-r after:from-transparent 
-                            after:via-white/5 after:to-transparent after:opacity-0 hover:after:opacity-100 
-                            after:transition-opacity after:duration-300">
-              Create New
-            </Link>
+               <div className="flex flex-col p-2 gap-5">
+                <Link href="/workspacefree"
+                            className="relative cursor-pointer inline-flex items-center gap-2 px-6 py-3 font-semibold text-white
+                  bg-gradient-to-tr from-[#000000] via-[#1f1f1f] to-[#1b1b1b] ring-4 ring-black/10
+                  rounded-full overflow-hidden hover:opacity-95 hover:ring-black/10 hover:from-black hover:via-[#1f1f1f] hover:to-black
+                  transition-all duration-300
+                  hover:shadow-[0_0_25px_rgba(0,0,0,0.6)] hover:scale-105 active:scale-95
+                  before:absolute before:top-4 before:left-1/2 before:-translate-x-1/2 before:w-[100px]
+                  before:h-[100px] before:rounded-full before:bg-gradient-to-b before:from-white/10 before:blur-xl
+                  after:absolute after:inset-0 after:rounded-full after:bg-gradient-to-r after:from-transparent
+                  after:via-white/5 after:to-transparent after:opacity-0 hover:after:opacity-100
+                  after:transition-opacity after:duration-300"
+
+                >
+                            Create New
+          </Link>
 
              <div>
                             <Link href="/workspace" className="buttonpro">

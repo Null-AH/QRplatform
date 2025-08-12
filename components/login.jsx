@@ -46,7 +46,7 @@ export default function Login() {
       setUserInfo({ name, email, photo });
 
         console.log(userInfo)
-      // إرسال التوكن للباك إند
+ 
       const response = await axios.post("https://mk25szk5-7093.inc1.devtunnels.ms/api/account/sync", {},
     {headers:{
       "Authorization":`Bearer ${idToken}`

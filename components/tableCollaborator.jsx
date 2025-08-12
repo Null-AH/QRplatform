@@ -55,55 +55,63 @@ const items = [
   },
 ]
 
-export default function TableCollaborators({id}) {
+export default function TableCollaborators({ id }) {
   return (
+    <div className="w-full">
+      {/* Header with Add Button */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold">Collaborators</h2>
+        <div className="flex w-fit justify-end rounded-md p-1 cursor-pointer bg-[#1e2939]">
+          <Addcollaborator />
+        </div>
+      </div>
 
-    <div className="lg:mt-30">
-  
-  <div className="flex w-fit  justify-end rounded-md p-1 cursor-pointer bg-[#1e2939] ">
-      <Addcollaborator />
-  </div>
-   
-    
-      <Table>
-   
-        <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-           
-       
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {items.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                <div className="flex items-center gap-3">
-                  <img
-                    className="rounded-full"
-                    src={item.image}
-                    width={40}
-                    height={40}
-                    alt={item.name} />
-                  <div>
-                    <div className="font-medium">{item.name}</div>
-                    <span className="text-muted-foreground mt-0.5 text-xs">
-                      {item.username}
-                    </span>
-                  </div>
-                </div>
-              </TableCell>
-
-
-              <TableCell>{item.email}</TableCell>
-              <TableCell>{item.location}</TableCell>
-       
+      {/* Table Container with horizontal scroll on mobile */}
+      <div className="overflow-x-auto rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="min-w-[200px]">Name</TableHead>
+              <TableHead className="min-w-[180px]">Email</TableHead>
+              <TableHead className="min-w-[120px]">Role</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {items.map((item) => (
+              <TableRow key={item.id} className="hover:bg-muted/50">
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <img
+                      className="rounded-full flex-shrink-0"
+                      src={item.image}
+                      width={40}
+                      height={40}
+                      alt={item.name} 
+                    />
+                    <div className="min-w-0">
+                      <div className="font-medium truncate">{item.name}</div>
+                      {/* <span className="text-muted-foreground mt-0.5 text-xs truncate block">
+                        {item.username}
+                      </span> */}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="truncate" title={item.email}>
+                    {item.email}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="truncate" title={item.location}>
+                    {item.location}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      
       <p className="text-muted-foreground mt-4 text-center text-sm">
         Table of Staff
       </p>
