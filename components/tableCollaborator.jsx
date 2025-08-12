@@ -55,7 +55,7 @@ const items = [
   },
 ]
 
-export default function TableCollaborators() {
+export default function TableCollaborators({id}) {
   return (
 
     <div className="lg:mt-30">

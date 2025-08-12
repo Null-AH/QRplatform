@@ -67,13 +67,13 @@ GetEventDetails();
     return(
     <div className="flex w-full h-full justify-center items-center">
 
-
+{/* بعدلي ترتيب العرض هنا   */}
     <div className="p-10 flex  flex-col lg:flex-row justify-center">
 
     <TasbleEventDetails url={`${baseApiUrl}/api/event/${id}`} />
     
     
-    <TableCollaborators />
+    <TableCollaborators id={id}/>
     
     
     

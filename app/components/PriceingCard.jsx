@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, Upload, LayoutTemplate, QrCode, FileSpreadsheet } from 'lucide-react';
+import Link from 'next/link';
 
 const PricingCard = () => {
   const features = [
@@ -96,9 +97,10 @@ const PricingCard = () => {
               </div>
             </div>
 
-            <button className="w-full cursor-pointer bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200">
+            <Link href={"/payservice"} className="block w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 text-center"
+>
               Get Started
-            </button>
+            </Link>
           </div>
         </div>
       </div>
