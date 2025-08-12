@@ -48,7 +48,7 @@ export default function Signup() {
     const result = await signInWithPopup(auth, googleProvider);
     console.log(result)
     const idToken = await result.user.getIdToken();
-
+    localStorage.setItem("token",idToken);
 
     const name = result.user.displayName;
     const email = result.user.email;
@@ -188,7 +188,7 @@ export default function Signup() {
       By signing up you agree to our{" "}
       <a className="underline hover:no-underline text-zinc-200" href="#">
         Terms
-      </a>.
+      </a>
     </p>
   </DialogContent>
 </Dialog>

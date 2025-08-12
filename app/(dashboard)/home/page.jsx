@@ -28,7 +28,7 @@ export default function Home() {
       if (user) {
         const idToken = await user.getIdToken();
         localStorage.setItem("token", idToken);
-        // console.log("Token:", idToken);
+        console.log("Token:", idToken);
       } else {
         console.log("unauthorized");
       }

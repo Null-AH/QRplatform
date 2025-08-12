@@ -18,52 +18,42 @@ const [template,setTemplate]=useState([]);
 const [loding,setloding]=useState(false);
 
 
-  const baseApiUrl = "https://mk25szk5-7093.inc1.devtunnels.ms";
+const baseApiUrl = "https://mk25szk5-7093.inc1.devtunnels.ms";
 
-  useEffect(()=>{
+useEffect(()=>{
 
-     
-      const GetTemplate=async ()=>{
 
-      setloding(true);
+const GetTemplate=async ()=>{
 
-      //        const currentUser = auth.currentUser;
-      // if (!currentUser) {
-      //   alert("You must be logged in to create an event.");
-      
-      //   // return;
-      // }
+    setloding(true);
 
-      // const idToken = await currentUser.getIdToken();
-      // localStorage.setItem("token",idToken);
 
-      // console.log(idToken)
-        
-try{
-        const response =await axios.get(`${baseApiUrl}/api/event/all`,          
-          {
-              headers:{
-      'Authorization': `Bearer ${localStorage.getItem("token")}`      
+    console.log(localStorage.getItem("token"))
+    try{
+    const response =await axios.get(`${baseApiUrl}/api/event/all`,          
+    {
+    headers:{
+    'Authorization': `Bearer ${localStorage.getItem("token")}`      
 
-      }
-      }
-      
-      )
-  setloding(false);
-      console.log(response.data);
-      setTemplate(response.data);
-    
     }
-      catch(error)
-          {
+    }
+
+    )
+    setloding(false);
+    console.log(response.data);
+    setTemplate(response.data);
+
+    }
+    catch(error)
+    {
     console.log(error);
 
-                } 
-                finally{
-                  setloding(false)
-                }
-              
-              }
+    } 
+    finally{
+    setloding(false)
+    }
+
+}
 
 
 GetTemplate();

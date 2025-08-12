@@ -29,7 +29,7 @@ export default function Addcollaborator({id}) {
   const [emails, setEmails] = useState([
     "",
   ])
-
+console.log(id)
   const [invitData,setInviteData]=useState([{email:"",role:""}])
 
   const [copied, setCopied] = useState(false);
@@ -58,6 +58,7 @@ export default function Addcollaborator({id}) {
 const handelAddInvitemember = async () => {
   setloding(true);
   const baseApiUrl = "https://mk25szk5-7093.inc1.devtunnels.ms";
+
 
   try {
     const respons=await axios.post(

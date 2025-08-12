@@ -10,21 +10,20 @@ import jsQR from "jsqr";
 import { useParams } from "next/navigation";
 
 function QRScanner() {
-  // `useParams` تُستخدم لجلب معرف الحدث من الرابط (URL)
-  const { id: eventId } = useParams(); // تم تغيير الاسم إلى eventId لزيادة الوضوح
+
+  const { id: eventId } = useParams(); 
   const baseApiUrl = "https://mk25szk5-7093.inc1.devtunnels.ms";
 
   const webcamRef = useRef(null);
   const [email, setEmail] = useState("");
   const [result, setResult] = useState("");
-  const [count, setCount] = useState(0); // العدد الأولي للمسجلين هو 0
+  const [count, setCount] = useState(0); 
   const [scanned, setScanned] = useState(false);
   const [cameraOn, setCameraOn] = useState(false);
   const [loading, setLoading] = useState(false);
   const intervalRef = useRef(null);
 
   const captureAndScan = () => {
-    // التأكد من أن الكاميرا تعمل ولا توجد عملية تحميل جارية
     if (!webcamRef.current || loading || !cameraOn) return;
     const imageSrc = webcamRef.current.getScreenshot();
     if (!imageSrc) return;
@@ -40,13 +39,10 @@ function QRScanner() {
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const code = jsQR(imageData.data, imageData.width, imageData.height);
 
-      // إذا تم العثور على QR Code ولم يتم مسحه من قبل
       if (code && code.data && !scanned) {
-        setScanned(true); // لمنع المسح المتكرر والفوري لنفس الكود
+        setScanned(true); 
         setEmail(code.data);
-        // استدعاء دالة تسجيل الحضور
         checkIn(code.data).finally(() => {
-          // إعادة تعيين الحالة بعد 3 ثوانٍ للسماح بالمسح التالي
           setTimeout(() => {
             setScanned(false);
             setEmail("");
@@ -57,65 +53,57 @@ function QRScanner() {
     };
   };
 
-  // --- دالة تسجيل الحضور (checkIn) المحدثة بالكامل ---
   const checkIn = async (scannedEmail) => {
     setLoading(true);
 
-    // إصلاح: الحصول على التوكن مباشرة عند الحاجة إليه لتجنب الأخطاء
     const token = localStorage.getItem("token");
     if (!token) {
-      setResult("❌ خطأ في المصادقة: أنت غير مسجل الدخول.");
+      setResult("❌ Authentication error: You are not logged in.");
       setLoading(false);
       return;
     }
 
     try {
-      // إصلاح: استخدام الرابط الصحيح للـ API مع معرف الحدث
       const res = await axios.post(
         `${baseApiUrl}/api/event/${eventId}/check-in`,
-        { email: scannedEmail }, // الجسم المرسل يحتوي على الإيميل
+        { email: scannedEmail },
         {
           headers: {
             "Content-Type": "application/json",
-            // إصلاح: إضافة التوكن إلى هيدر الطلب للمصادقة
             "Authorization": `Bearer ${token}` 
           }
         }
       );
 
-      // إصلاح: قراءة الخصائص بصيغة camelCase التي يرسلها الباك-إند
       const data = res.data;
       if (data.status === "Success") {
-        setResult(`✅ تم تسجيل الحضور: ${data.attendeeName}`);
+        setResult(`✅ Attendance recorded: ${data.attendeeName}`);
         setCount(data.checkedInCount);
       }
     } catch (error) {
-      // إصلاح: التعامل بشكل صحيح مع استجابات الخطأ من الباك-إند (مثل 409 و 404)
       if (error.response && error.response.data) {
         const errorData = error.response.data;
         if (errorData.status === "AlreadyCheckedIn") {
-          setResult(`� مسجل مسبقًا: ${errorData.attendeeName}`);
-          setCount(errorData.checkedInCount); // تحديث العدد حتى في هذه الحالة
+          setResult(`� Already checked in: ${errorData.attendeeName}`);
+          setCount(errorData.checkedInCount); 
         } else if (errorData.status === "NotFound") {
-          setResult("❌ هذا الشخص غير موجود في قائمة المدعوين لهذا الحدث.");
+          setResult("❌ This person is not in the guest list for this event.");
         } else {
-          setResult("❌ حدث خطأ غير معروف في الخادم.");
+          setResult("❌ An unknown server error occurred.");
         }
       } else {
-        setResult("❌ لا يمكن الاتصال بالخادم.");
+        setResult("❌ Cannot connect to the server.");
       }
     } finally {
       setLoading(false);
     }
   };
 
-  // دالة لجلب عدد الحضور الحالي بشكل دوري
   const fetchCount = async () => {
-    // إصلاح: الحصول على التوكن مباشرة عند الحاجة إليه
     const token = localStorage.getItem("token");
     if (!token) {
-      console.error("لم يتم العثور على توكن المصادقة لجلب العدد.");
-      return; // الخروج بصمت بدون إظهار خطأ للمستخدم
+      console.error("Authentication token not found to fetch count.");
+      return; 
     }
 
     try {
@@ -124,36 +112,29 @@ function QRScanner() {
           "Authorization": `Bearer ${token}`,
         }
       });
-      // إصلاح: قراءة الخاصية بصيغة camelCase
+ 
       if (res.data && res.data.checkedInCount !== undefined) {
         setCount(res.data.checkedInCount);
       }
     } catch (err) {
-      console.error("خطأ في جلب عدد الحضور:", err);
+      console.error("Error fetching attendance count:", err);
     }
   };
 
-  // دالة useEffect الرئيسية التي تعمل عند تحميل المكون أو تغيير حالته
   useEffect(() => {
-    fetchCount(); // جلب العدد الأولي عند تحميل الصفحة
+    fetchCount();
 
     if (cameraOn) {
-      // إعداد الفاصل الزمني لمسح الكاميرا
-      intervalRef.current = setInterval(captureAndScan, 1000); // المسح كل ثانية
-      
-      // إعداد فاصل زمني منفصل لجلب العدد بشكل دوري للمزامنة
-      const pollInterval = setInterval(fetchCount, 5000); // جلب البيانات كل 5 ثواني
+      intervalRef.current = setInterval(captureAndScan, 1000);
+      const pollInterval = setInterval(fetchCount, 5000); 
 
-      // دالة التنظيف: تتوقف الفواصل الزمنية عند إغلاق المكون لتجنب استهلاك الموارد
       return () => {
         clearInterval(intervalRef.current);
         clearInterval(pollInterval);
       };
     }
-  }, [cameraOn]); // هذه الدالة تعتمد فقط على حالة تشغيل الكاميرا
+  }, [cameraOn]); 
 
-  // --- جزء العرض (JSX) يبقى كما هو إلى حد كبير ---
-  // لا توجد تغييرات مطلوبة في هذا الجزء
   return (
     <div className="min-h-screen py-10 px-4 flex flex-col items-center justify-center gap-4">
       <div
@@ -195,14 +176,14 @@ function QRScanner() {
         <div className="space-y-4 flex flex-col ">
           <div className="flex w-full items-center justify-center gap-2 text-gray-400">
             <MdMarkEmailRead className="text-indigo-500 text-xl" />
-            <span className="font-medium">البريد الممسوح:</span>
-            <span className="text-sm">{email || "لم يتم المسح بعد"}</span>
+            <span className="font-medium">Scanned Email:</span>
+            <span className="text-sm">{email || "Not scanned yet"}</span>
           </div>
 
           {loading && (
              <div className="flex items-center justify-center gap-2 text-sm text-blue-400">
               <span className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></span>
-              جار التحقق...
+              Verifying...
             </div>
           )}
 
@@ -218,7 +199,7 @@ function QRScanner() {
             <IoIosPeople className="text-2xl text-white" />
             <div className="flex flex-col justify-center items-center">
               <div className="text-5xl font-bold text-white">{count}</div>
-              <div className="text-sm text-gray-400">عدد الحضور المسجلين</div>
+              <div className="text-sm text-gray-400">Registered attendees</div>
             </div>
           </div>
         </div>
@@ -228,7 +209,6 @@ function QRScanner() {
 }
 
 export default QRScanner;
-
 
 
 // "use client";
