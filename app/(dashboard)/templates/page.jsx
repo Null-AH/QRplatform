@@ -3,7 +3,7 @@ import TextType from "@/app/components/emptyTemplate";
 import WaveCard from "@/app/components/EventCard";
 import NavBar from "@/app/components/templateNav";
 import ShinyText from "@/app/components/TextHomePAge";
-import { auth } from "@/app/firebase/config";
+
 import { LoaderOne } from "@/components/loding";
 import axios from "axios";
 
@@ -21,7 +21,6 @@ const [loding,setloding]=useState(false);
   const baseApiUrl = "https://mk25szk5-7093.inc1.devtunnels.ms";
 
   useEffect(()=>{
-
 
      
       const GetTemplate=async ()=>{
