@@ -2,10 +2,108 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { auth } from "../firebase/config";
+import { signOut } from "firebase/auth";
 
 
 
+import {
+  BoltIcon,
+  BookOpenIcon,
+  ChevronDownIcon,
+  Layers2Icon,
+  LogOutIcon,
+  PinIcon,
+  UserPenIcon,
+} from "lucide-react"
 
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+function DropDownLogout({ url ,name,email}) {
+
+  const handleLogout = () => {
+  signOut(auth)
+    .then(() => {
+      console.log("تم تسجيل الخروج بنجاح");
+   
+      window.location.href = "/";
+    })
+    .catch((error) => {
+      console.error("خطأ أثناء تسجيل الخروج:", error);
+    });
+};
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
+          <Avatar className="w-11 h-11">
+            <AvatarImage src={url}   alt="Profile image"  size={"lg"}/>
+            <AvatarFallback>KK</AvatarFallback>
+          </Avatar>
+          <ChevronDownIcon size={16} className="opacity-60" aria-hidden="true" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="max-w-64">
+        <DropdownMenuLabel className="flex min-w-0 flex-col">
+          <span className="text-foreground truncate text-sm font-medium">
+            {name}
+          </span>
+          <span className="text-muted-foreground truncate text-xs font-normal">
+            {email}
+          </span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+
+        {/* <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <BoltIcon size={16} className="opacity-60" aria-hidden="true" />
+            <span>Option 1</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Layers2Icon size={16} className="opacity-60" aria-hidden="true" />
+            <span>Option 2</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <BookOpenIcon size={16} className="opacity-60" aria-hidden="true" />
+            <span>Option 3</span>
+          </DropdownMenuItem>
+        </DropdownMenuGroup> */}
+
+
+        {/* <DropdownMenuSeparator /> */}
+        {/* <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <PinIcon size={16} className="opacity-60" aria-hidden="true" />
+            <span>Option 4</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <UserPenIcon size={16} className="opacity-60" aria-hidden="true" />
+            <span>Option 5</span>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator /> */}
+        <DropdownMenuItem className="cursor-pointer"  onClick={handleLogout}>
+          <LogOutIcon size={16} className="opacity-60 cursor-pointer" aria-hidden="true"  />
+          <span  className="cursor-pointer"  >Logout</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 
 
@@ -13,6 +111,9 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const [userinfo,setUserInfo]=useState({email:"",name:"",imgUrl:""});
+
+
+
 
  useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -27,11 +128,11 @@ export default function NavBar() {
   });
 
   return () => unsubscribe();
-}, []); // خليه ثابت [] حتى ما يتغير
+}, []); 
 
   return (
     <>
-      {/* Desktop NavBar */}
+    
       <div className="hidden md:flex h-[60px] w-[70%] fixed top-6 z-50 left-1/2 -translate-x-1/2 
                       px-6 rounded-full border border-white/20 backdrop-blur-md bg-white/10 
                       text-white items-center justify-between shadow-md transition-all duration-300 
@@ -39,15 +140,27 @@ export default function NavBar() {
 
         <div className="text-xl font-bold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent 
                         hover:from-blue-400 hover:to-purple-400 transition-all duration-300 cursor-pointer">
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-0">
                 {/* صورة المستخدم + الإيميل */}
                 <div className="flex flex-col p-2 items-start">
                
 
                 {userinfo.imgUrl 
-                      ? <img src={userinfo.imgUrl} alt="User"     className="w-11 h-11 rounded-full border border-white/30 shadow-sm" /> 
-                      : <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf1fiSQO7JfDw0uv1Ae_Ye-Bo9nhGNg27dwg&s" alt="Default avatar"      className="w-11 h-11 rounded-full border border-white/30 shadow-sm"/>
+                      ? 
+                      
+                      <DropDownLogout url={userinfo.imgUrl} email={userinfo.email} name={userinfo.name}/>
+                      
+                      // <img src={userinfo.imgUrl} alt="User"     className="w-11 h-11 rounded-full border border-white/30 shadow-sm" /> 
+
+
+                      : 
+                      
+                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf1fiSQO7JfDw0uv1Ae_Ye-Bo9nhGNg27dwg&s" alt="Default avatar"      className="w-11 h-11 rounded-full border border-white/30 shadow-sm"/>
+                    
+                    
+                    
                     }
+                 
                 </div>
 
             <div className="flex flex-col  items-start">           
@@ -137,7 +250,7 @@ export default function NavBar() {
                     }
                 </div>
 
-            <div className="flex flex-col  items-start">           
+            <div className="flex flex-col items-start">           
                
                 <h3 className="text-sm font-semibold text-white">{userinfo.name}</h3>
                 <p className="text-xs text-gray-400 mt-1">{userinfo.email}</p> </div>

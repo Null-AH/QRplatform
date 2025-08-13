@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useRef } from "react";
+import { FaCamera } from "react-icons/fa";
 import Actions from "./modealCard";
 
 
@@ -148,9 +149,11 @@ const finalImage = isValidImage(imagurl)
                     />
                   </svg>
                 </Link>
-                <Link href={`webcam/${id}`} className="text-white/50 text-xs glass px-2 py-1 rounded-full border border-white/10">
-                  use
+                <Link href={`webcam/${id}`} className="text-xs flex items-center  justify-center glass  py-1 rounded-full border border-[#2F5BB8] px-5 shadow-2xl shadow-[#2F5BB8] text-white">
+                  <span className="flex mr-2">Scan</span>  <FaCamera   className="flex"/>
                 </Link>
+
+               
               </div>
             </div>
 
