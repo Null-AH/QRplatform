@@ -1,63 +1,129 @@
-"use client"
-import TextType from "@/app/components/emptyTemplate";
-import WaveCard from "@/app/components/EventCard";
-import NavBar from "@/app/components/templateNav";
-import ShinyText from "@/app/components/TextHomePAge";
-
-import { LoaderOne } from "@/components/loding";
+"use client";
+import { useState, useEffect } from "react";
+import { useAuth } from "../context/authLogin";
 import axios from "axios";
 
-import Link from "next/link";
-
-import { useState } from "react";
-import { useEffect } from "react";
-
-export default function TemplatesPage() {
-
-const [template,setTemplate]=useState([]);
-const [loding,setloding]=useState(false);
-
-
+import NavBar from "@/app/components/templateNav";
+import WaveCard from "@/app/components/EventCard";
+import TextType from "@/app/components/emptyTemplate";
+import { LoaderOne } from "@/components/loding";
+import { useReloadTemplate } from "../context/reloadTempleat";
 const baseApiUrl = "https://mk25szk5-7093.inc1.devtunnels.ms";
 
-useEffect(()=>{
+export default function TemplatesPage() {
+  const {reload, setReload}=useReloadTemplate();
+  const [template, setTemplate] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { isSyncedWithBackend } = useAuth();
+
+  useEffect(() => {
+    if (!isSyncedWithBackend) return;
+
+    const fetchTemplates = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${baseApiUrl}/api/event/all`);
+        setTemplate(response.data);
+        console.log(response.data)
+      } catch (error) {
+        console.error("❌ Fetch templates failed", error);
+      } finally {
+        setLoading(false);
+        setReload(false);
+      }
+    };
+
+    fetchTemplates();
+  }, [isSyncedWithBackend,reload]);
 
 
-const GetTemplate=async ()=>{
 
-    setloding(true);
+// "use client"
+// import TextType from "@/app/components/emptyTemplate";
+// import WaveCard from "@/app/components/EventCard";
+// import NavBar from "@/app/components/templateNav";
+// import ShinyText from "@/app/components/TextHomePAge";
+// // import { useAuth } from "../context/authLogin";
+// import { LoaderOne } from "@/components/loding";
+// import axios from "axios";
 
+// import Link from "next/link";
 
-    console.log(localStorage.getItem("token"))
-    try{
-    const response =await axios.get(`${baseApiUrl}/api/event/all`,          
-    {
-    headers:{
-    'Authorization': `Bearer ${localStorage.getItem("token")}`      
+// import { useState } from "react";
+// import { useEffect } from "react";
+// import { useAuth } from "../context/authLogin";
 
-    }
-    }
+// export default function TemplatesPage() {
 
-    )
-    setloding(false);
-    console.log(response.data);
-    setTemplate(response.data);
-
-    }
-    catch(error)
-    {
-    console.log(error);
-
-    } 
-    finally{
-    setloding(false)
-    }
-
-}
+// const [template,setTemplate]=useState([]);
+// const [loding,setloding]=useState(false);
 
 
-GetTemplate();
-  },[])
+// const baseApiUrl = "https://mk25szk5-7093.inc1.devtunnels.ms";
+
+// const { isSyncedWithBackend } = useAuth();
+
+// useEffect(() => {
+//   if (!isSyncedWithBackend) return;
+
+//   const fetchTemplates = async () => {
+//     setloding(true);
+//     try {
+//       const response = await axios.get(`${baseApiUrl}/api/event/all`);
+//       setTemplate(response.data);
+//     } catch (error) {
+//       console.error(error);
+//     } finally {
+//       setloding(false);
+//     }
+//   };
+
+//   fetchTemplates();
+// }, [isSyncedWithBackend]);
+
+
+// useEffect(()=>{
+
+
+// // if(!isSyncedWithBackend){
+// //       return;
+// //     }
+
+// const GetTemplate=async ()=>{
+
+//     setloding(true);
+
+    
+//     console.log(localStorage.getItem("token"))
+//     try{
+//     const response =await axios.get(`${baseApiUrl}/api/event/all`,          
+//     {
+//     headers:{
+//     'Authorization': `Bearer ${localStorage.getItem("token")}`      
+
+//     }
+//     }
+
+//     )
+//     setloding(false);
+//     console.log(response.data);
+//     setTemplate(response.data);
+
+//     }
+//     catch(error)
+//     {
+//     console.log(error);
+
+//     } 
+//     finally{
+//     setloding(false)
+//     }
+
+// }
+
+
+// GetTemplate();
+//   },[])
 
   return (
     <div className="flex flex-wrap justify-center gap-6 p-6 b min-h-screen">
@@ -65,7 +131,7 @@ GetTemplate();
 
             <div className="w-full max-w-7xl mx-auto px-4 mt-[100px]">
 
-        {loding?
+        {loading?
         
         <div className="flex w-full h-full justify-center items-center"  >
           
@@ -97,8 +163,7 @@ GetTemplate();
                   className="text-[30px] mb-[100px] text-shadow-2xl p-3"
                   
                 />
-                {/* <ShinyText text="you dont have any Template yet" disabled={false} speed={3} className='custom-class' /> */}
-                {/* <h1 className="text-[30px] text-[#c4d1e2] mb-[100px]"></h1> */}
+             
               </div>
               
               </>: <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
@@ -121,6 +186,7 @@ GetTemplate();
               imagurl={`${baseApiUrl}${item.backgroundImageUri}`} 
               href={`templates/${item.id}`}
               id={item.id}
+              role={item.role}
             />
               
             

@@ -2,7 +2,7 @@
 import { IoMdPersonAdd } from "react-icons/io";
 import { useEffect, useId, useRef, useState } from "react"
 import { CheckIcon, CopyIcon, UserRoundPlusIcon } from "lucide-react"
-
+import { RiCloseLargeLine } from "react-icons/ri";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -23,16 +23,17 @@ import {
 } from "@/components/ui/tooltip"
 import Select from "./select";
 import axios from "axios";
+import { useReloadTemplate } from "@/app/(dashboard)/context/reloadTempleat";
 
 export default function Addcollaborator({id}) {
-  // const id = useId()
-  const [emails, setEmails] = useState([
-    "",
-  ])
+  const {addItem,setAddItem}=useReloadTemplate();
+  const [open,setOpen]=useState(false);
+  const [emails, setEmails] = useState([""])
 console.log(id)
   const [invitData,setInviteData]=useState([{email:"",role:""}])
 
   const [copied, setCopied] = useState(false);
+  
   const [loding,setloding]=useState(false);
   // const inputRef = useRef(null)
   const lastInputRef = useRef(null)
@@ -41,19 +42,27 @@ console.log(id)
     setInviteData([...invitData, {email:"",role:""}])
   }
 
-  // const handleEmailChange = (index, value) => {
-  //   const newEmails = [...emails]
-  //   newEmails[index] = value
-  //   setEmails(newEmails)
-  // }
 
-  // const handleCopy = () => {
-  //   if (inputRef.current) {
-  //     navigator.clipboard.writeText(inputRef.current.value)
-  //     setCopied(true)
-  //     setTimeout(() => setCopied(false), 1500)
-  //   }
-  // }
+
+  const subInputs=(index)=>{
+
+    setInviteData(invitData.filter((item,i)=>i!==index));
+
+  }
+
+
+  const senddata = () => {
+  const isValid = invitData.every(item => 
+    item.email.trim() !== "" && item.role.trim() !== ""
+  );
+
+  return isValid; 
+}
+
+
+useEffect(()=>{
+  senddata();
+},[invitData])
 
 const handelAddInvitemember = async () => {
   setloding(true);
@@ -61,35 +70,32 @@ const handelAddInvitemember = async () => {
 
 
   try {
-    const respons=await axios.post(
-      `${baseApiUrl}/api/event/${id}/addteam`,
-      invitData, 
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+    const respons=await axios.post(`${baseApiUrl}/api/event/${id}/addteam`,
+      invitData
+ 
     );
 
 
     console.log(respons.data);
+    setAddItem(true)
+    setOpen(false);
 
   } catch (error) {
     console.error(error);
   } finally {
     setloding(false);
+    setOpen(false);
   }
 };
 
 
   return (
     <div className="dark">
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger className="bg-transparent w-full flex items-start" asChild>
           <Button 
             variant="ghost" 
-            className="!border-none cursor-pointer !text-start !flex !items-center   !justify-between  !bg-transparent !text-gray-100 hover:!bg-transparent hover:!text-gray-100 focus:!bg-transparent active:!bg-transparent !shadow-none !outline-none !ring-0 !p-2 !h-auto"
+            className="!border-none cursor-pointer  !text-start !flex !items-center   !justify-between  !bg-transparent !text-gray-100 hover:!bg-transparent hover:!text-gray-100 focus:!bg-transparent active:!bg-transparent !shadow-none !outline-none !ring-0 !p-2 !h-auto"
             style={{ 
               backgroundColor: 'transparent !important',
               border: 'none !important',
@@ -128,9 +134,11 @@ const handelAddInvitemember = async () => {
                 <div className="space-y-3">
                  {invitData.map((item, index) => (
                   <div className="flex justify-between items-center gap-1" key={index}>
+                    {index >=1? <><RiCloseLargeLine onClick={()=>{subInputs(index)}} className=" absolute cursor-pointer -left-0 w-6" /></>:<></>}
                     <Input
                       id={`team-email-${index + 1}`}
                       placeholder="hi@yourcompany.com"
+                      required
                       type="email"
                       value={item.email}
                       onChange={(e) => {
@@ -155,9 +163,11 @@ const handelAddInvitemember = async () => {
                 className="text-sm underline hover:no-underline text-blue-400 cursor-pointer hover:text-blue-300">
                 + Add another
               </button>
+
+           
             </div>
-            <Button onClick={handelAddInvitemember} type="button" className="w-full bg-blue-600 cursor-pointer hover:bg-blue-700 text-white">
-              Send invites
+            <Button disabled={!senddata() || loding } onClick={handelAddInvitemember} type="button"  className="w-full bg-blue-600 cursor-pointer hover:bg-blue-700 text-white">
+              {loding? "Sending...":"Send invites"}
             </Button>
           </form>
 

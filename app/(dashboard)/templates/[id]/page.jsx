@@ -114,27 +114,27 @@ const EnhancedCameraButton = () => {
 
 
 const EventDetails = () => {
-    const [EventInfo, setEventInfo] = useState([]);
+    // const [EventInfo, setEventInfo] = useState([]);
     const { id } = useParams()
 
-    useEffect(() => {
-        const GetEventDetails = async () => {
-            try {
-                console.log(id)
-                const response = await axios.get(`${baseApiUrl}/api/event/${id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem("token")}`
-                    }
-                })
-                console.log("peratn", response.data)
-                setEventInfo(response.data);
-            }
-            catch (error) {
-                console.log("error her", error);
-            }
-        }
-        GetEventDetails();
-    }, [])
+    // useEffect(() => {
+    //     const GetEventDetails = async () => {
+    //         try {
+    //             console.log(id)
+    //             const response = await axios.get(`${baseApiUrl}/api/event/${id}`, {
+    //                 // headers: {
+    //                 //     'Authorization': `Bearer ${localStorage.getItem("token")}`
+    //                 // }
+    //             })
+    //             console.log("peratn", response.data)
+    //             setEventInfo(response.data);
+    //         }
+    //         catch (error) {
+    //             console.log("error her", error);
+    //         }
+    //     }
+    //     GetEventDetails();
+    // }, [])
 
     return (
         <div className="w-full min-h-screen">
@@ -149,7 +149,7 @@ const EventDetails = () => {
                     
                   
                     <div className="w-full max-w-4xl mx-auto px-4">
-                        <TableCollaborators id={id} />
+                        <TableCollaborators  url={`${baseApiUrl}/api/event/${id}/getteam`} urlRole={`${baseApiUrl}/api/event/${id}`}/>
                     </div>
                     
                   

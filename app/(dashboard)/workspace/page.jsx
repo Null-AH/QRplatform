@@ -69,11 +69,12 @@ export default function WorkeSpace() {
      
         const response = await axios.post(
           `${baseApiUrl}/api/event/create`,
-          formData,
+          formData
+          ,
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              'Authorization': `Bearer ${idToken}`
+              // 'Authorization': `Bearer ${idToken}`
             },
         
           }

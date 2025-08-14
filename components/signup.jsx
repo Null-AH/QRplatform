@@ -40,45 +40,64 @@ export default function Signup() {
   const [name,setName]=useState("");
 
 
-
   const handleGoogleLogin = async () => {
-    
-  try {
     setLoading(true);
-    const result = await signInWithPopup(auth, googleProvider);
-    console.log(result)
-    const idToken = await result.user.getIdToken();
-    localStorage.setItem("token",idToken);
+    setMessage("");
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
 
-    const name = result.user.displayName;
-    const email = result.user.email;
-    const photo = result.user.photoURL;
+      const name = result.user.displayName;
+      const userEmail = result.user.email;
+      const photo = result.user.photoURL;
 
-
-    setphoto(photo);
-    setName(name);
-
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Photo URL:", photo);
-
-    const response = await axios.post("https://mk25szk5-7093.inc1.devtunnels.ms/api/account/sync", {},
-    {headers:{
-      "Authorization":`Bearer ${idToken}`
-    }},
-  );
-
-    const jwt = response.data.token;
-    setToken(jwt);
-    localStorage.setItem("token", jwt);
-    alert("تم تسجيل الدخول بنجاح ✅");
-  } catch (error) {
-    console.error("Login error:", error);
-    alert("فشل تسجيل الدخول ❌");
-  } finally {
+      setUserInfo({ name, email: userEmail, photo });
+      setMessage("✅ تم تسجيل الدخول بجوجل بنجاح");
+    } catch (error) {
+      setMessage("❌ فشل تسجيل الدخول بجوجل: " + error.message);
+    }
     setLoading(false);
-  }
-};
+  };
+
+
+
+//   const handleGoogleLogin = async () => {
+    
+//   try {
+//     setLoading(true);
+//     const result = await signInWithPopup(auth, googleProvider);
+//     console.log(result)
+//     const idToken = await result.user.getIdToken();
+//     localStorage.setItem("token",idToken);
+
+//     const name = result.user.displayName;
+//     const email = result.user.email;
+//     const photo = result.user.photoURL;
+
+
+//     setphoto(photo);
+//     setName(name);
+
+//     console.log("Name:", name);
+//     console.log("Email:", email);
+//     console.log("Photo URL:", photo);
+
+//     const response = await axios.post("https://mk25szk5-7093.inc1.devtunnels.ms/api/account/sync", {},
+//     {headers:{
+//       "Authorization":`Bearer ${idToken}`
+//     }},
+//   );
+
+//     const jwt = response.data.token;
+//     setToken(jwt);
+//     localStorage.setItem("token", jwt);
+//     alert("تم تسجيل الدخول بنجاح ✅");
+//   } catch (error) {
+//     console.error("Login error:", error);
+//     alert("فشل تسجيل الدخول ❌");
+//   } finally {
+//     setLoading(false);
+//   }
+// };
 
 
 

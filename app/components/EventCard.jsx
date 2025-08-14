@@ -6,7 +6,7 @@ import Actions from "./modealCard";
 
 
 
-export default function WaveCard({ tags, title, description, buttonText , imagurl=`https://placehold.co/600x400/2B2543/FFFFFF/png?text=${title}` ,href,id}) {
+export default function WaveCard({ tags,role, title, description, buttonText , imagurl=`https://placehold.co/600x400/2B2543/FFFFFF/png?text=${title}` ,href,id}) {
   const canvasRef = useRef(null);
 const isValidImage = (url) => {
   if (!url) return false;
@@ -94,12 +94,7 @@ const finalImage = isValidImage(imagurl)
   }, []);
   return (
     <div className="relative w-full h-full overflow-hidden">
-      {/* Constrained Canvas */}
-      {/* <canvas
-        ref={canvasRef}
-        className="absolute top-0 left-0 w-full h-full z-0"
-        style={{ background: "transparent" }}
-      /> */}
+    
 
       {/* Card Content */}
       <div className="relative z-10 w-full h-full flex flex-col justify-center items-center p-2">
@@ -122,20 +117,40 @@ const finalImage = isValidImage(imagurl)
 
             <div className="p-4">
       
-      <div className="flex w-full justify-between">
-              <span className="inline-block px-3 py-1 glass text-indigo-300 rounded-full text-xs font-medium mb-3 border border-indigo-400/30">
+      <div className={`flex w-full  justify-between`}>
+
+              <span className={`flex  px-3 py-1 glass text-indigo-300 rounded-full text-xs font-medium mb-3 border border-indigo-400/30`}>
                 {tags}
               </span>
-
-             <Actions id={id} name={title} date={description} />
+            <Actions id={id} name={title}  role={role} date={description} />
+           
       </div>
              
-              <h3 className="text-lg font-medium text-white mb-2">{title}</h3>
+             <div className={`flex flex-col w-full ${role==="Check-In Staff"?"items-center":""} justify-center p-3`}>
+                <h3 className={`${role==="Check-In Staff"?"text-3xl":"text-2xl"} font-medium text-white mb-2`}>{title}</h3>
               <p className="text-white/70 mb-4 leading-relaxed text-xs">
                 {description}
               </p>
+             </div>
+            
+
+
               <div className="flex justify-between items-center">
-                <Link
+                    
+    {role==="Owner"?  <Link
+                      href={href}
+                  className="text-indigo-400 hover:text-indigo-300 transition flex items-center text-xs font-medium glass px-3 py-1.5 rounded-lg border border-indigo-400/30">
+                  {buttonText}
+                  <svg className="w-3 h-3 ml-1" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M5 12H19M19 12L12 5M19 12L12 19"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>:role==="Editor"?  <Link
                   href={href}
                   className="text-indigo-400 hover:text-indigo-300 transition flex items-center text-xs font-medium glass px-3 py-1.5 rounded-lg border border-indigo-400/30">
                   {buttonText}
@@ -148,8 +163,10 @@ const finalImage = isValidImage(imagurl)
                       strokeLinejoin="round"
                     />
                   </svg>
-                </Link>
-                <Link href={`webcam/${id}`} className="text-xs flex items-center  justify-center glass  py-1 rounded-full border border-[#2F5BB8] px-5 shadow-2xl shadow-[#2F5BB8] text-white">
+                </Link>:<></>}
+              
+
+                <Link href={`webcam/${id}`} className={`text-xs flex items-center ${role==="Check-In Staff"?"w-full px-15":"w-full ml-2 px-20"}} justify-center glass  py-1 rounded-full border border-[#2F5BB8]  shadow-2xl shadow-[#2F5BB8] text-white`}>
                   <span className="flex mr-2">Scan</span>  <FaCamera   className="flex"/>
                 </Link>
 
