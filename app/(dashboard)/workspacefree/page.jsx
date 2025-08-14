@@ -59,11 +59,12 @@ export default function WorkeSpaceFree() {
      
         const response = await axios.post(
           `${baseApiUrl}/api/event/create-free`,
-          formData,
+          formData
+          ,
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              'Authorization': `Bearer ${localStorage.getItem("token")}`
+              // 'Authorization': `Bearer ${localStorage.getItem("token")}`
             },
         
           }

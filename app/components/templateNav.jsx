@@ -34,6 +34,14 @@ import {
 
 function DropDownLogout({ url ,name,email}) {
 
+
+  let fullname=name;
+  let parts=fullname.split(" ");
+  let initail=parts.map(word => word.charAt(0)).join(" ");
+
+
+
+
   const handleLogout = () => {
   signOut(auth)
     .then(() => {
@@ -52,7 +60,7 @@ function DropDownLogout({ url ,name,email}) {
         <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
           <Avatar className="w-11 h-11">
             <AvatarImage src={url}   alt="Profile image"  size={"lg"}/>
-            <AvatarFallback>KK</AvatarFallback>
+            <AvatarFallback>{initail}</AvatarFallback>
           </Avatar>
           <ChevronDownIcon size={16} className="opacity-60" aria-hidden="true" />
         </Button>
